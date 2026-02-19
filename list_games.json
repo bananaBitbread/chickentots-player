@@ -547,6 +547,11 @@
 		"popular": false
 	},
 	{
+		"gameIndex": "games/ultrakill/index.html",
+		"gameName": "Ultrakill",
+		"popular": false
+	},
+	{
 		"gameIndex": "games/undertale/index.html",
 		"gameName": "UNDERTALE",
 		"popular": true
