@@ -6,5 +6,9 @@
 	{
 		"appIndex": "apps/mathway/index.html",
 		"appName": "Mathway"
+	},
+	{
+		"appIndex": "apps/ide/index.html",
+		"appName": "Code IDE"
 	}
 ]
