@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="title" content="3kh0.github.io" />
+    <meta name="description"
+        content="Build the ultimate brick-busting machine to destroy billions of bricks. Idle breakout combines classic brick breaking with an insanely addicting idle loop." />
+    <meta name="keywords" content="games, ad blocker, trolls, unblocked games, web games, online games, fun, tags" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="1 days" />
+    <meta name="author" content="3kh0" />
+    <meta content="img/thumbnail.png" property="og:image" />
+    <meta content="#000000" data-react-helmet="true" name="theme-color" />
+    <link rel="icon" sizes="192x192" href="img/favicon.png" />
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="img/favicon.png" type="image/x-icon" />
+    <base href="https://cdn.jsdelivr.net/gh/55gms/55gms@master/static/misc/idle-breakout/">
+
+    <title>Idle Breakout • Neon Frame</title>
+
+    <style>
+        /* RESET & FULL-PAGE FRAME */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            /* deep black background for contrast */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* COOL NEON FRAME – always fits page with dynamic glow */
+        .frame {
+            position: relative;
+            width: 100vw;
+            /* take full viewport width */
+            height: 100vh;
+            /* take full viewport height */
+            max-width: 100%;
+            max-height: 100%;
+            padding: 1.5%;
+            /* flexible inner spacing, frame thickness adapts */
+            background: transparent;
+            box-shadow:
+                inset 0 0 30px #00ffff33,
+                0 0 40px #ff00ff80;
+            /* outer glow */
+            animation: borderPulse 3s infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* animated neon border effect */
+        .frame::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 4px solid transparent;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff00ff) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: rotateGradient 6s linear infinite;
+            opacity: 0.8;
+            border-radius: 12px;
+            /* subtle rounding to match canvas vibe */
+        }
+
+        /* extra sparkling corners */
+        .frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, #ff66ff40 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, #66ffff40 0%, transparent 30%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: flicker 4s infinite;
+        }
+
+        @keyframes borderPulse {
+            0% {
+                box-shadow: inset 0 0 20px #f0f, 0 0 40px #0ff;
+            }
+
+            100% {
+                box-shadow: inset 0 0 50px #0ff, 0 0 70px #f0f;
+            }
+        }
+
+        @keyframes rotateGradient {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        /* GAME CONTAINER — ensures canvas always fits perfectly */
+        .game-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            /* letterbox background if needed */
+            border-radius: 8px;
+            overflow: hidden;
+            /* hides any stray overflow */
+        }
+
+        /* canvas styling: maintain aspect ratio but fit inside flex container */
+        #canvas {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* keeps 1024x768 visible without cropping */
+            image-rendering: pixelated;
+            -webkit-interpolation-mode: nearest-neighbor;
+            display: block;
+            box-shadow: 0 0 30px #00aaff40;
+            /* subtle extra glow */
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            /* thin inner neon */
+            border-radius: 4px;
+        }
+
+        /* canvas background matches original dark */
+        body {
+            background: #000;
+        }
+
+        /* keep the gm4html5 div contained */
+        .gm4html5 {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* fullscreen pseudo-class refinements */
+        :-webkit-full-screen .frame {
+            padding: 1%;
+        }
+
+        :-webkit-full-screen #canvas {
+            border-width: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- the cool frame surrounds everything -->
+    <div class="frame">
+        <div class="game-wrapper">
+            <!-- Original gm4html5 structure, but now canvas will scale -->
+            <div align="center" class="gm4html5" id="gm4html5">
+                <canvas id="canvas" width="1024" height="768">
+                    <p>Your browser doesn't support HTML5 canvas.</p>
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game scripts (exactly as before) -->
+    <script src="/assets/js/script.js?v=14"></script>
+    <script type="text/javascript" src="html5game/Coding_BreakOut1.js"></script>
+    <script>
+        window.onload = GameMaker_Init;
+    </script>
+
+    <!-- tiny addition to ensure canvas always fits even if game tries to set size 
+       we let CSS handle containment, but this ensures no scrollbars appear -->
+    <script>
+        (function() {
+      // optional: guarantee that canvas stays inside on any resize/orientation change
+      function adjustCanvasDisplay() {
+        const canvas = document.getElementById('canvas');
+        if (!canvas) return;
+        // native size is 1024x768; CSS handles fit. 
+        // just force removal of any inline size that game engine might set.
+        // but we preserve width/height attributes for pixel ratio.
+        // no inline width style, let CSS do it.
+        canvas.style.width = 'auto';
+        canvas.style.height = 'auto';
+      }
+      window.addEventListener('resize', adjustCanvasDisplay);
+      window.addEventListener('orientationchange', adjustCanvasDisplay);
+      setTimeout(adjustCanvasDisplay, 200); // after game init
+    })();
+    </script>
+</body>
+
+</html>
