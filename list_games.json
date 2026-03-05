@@ -225,6 +225,11 @@
 		"popular": false
 	},
 	{
+		"gameIndex": "games/idle-breakout/index.html",
+		"gameName": "Idle Breakout",
+		"popular": true
+	},
+	{
 		"gameIndex": "games/infiltratingtheairship/index.html",
 		"gameName": "Infiltrating the Airship",
 		"popular": false
