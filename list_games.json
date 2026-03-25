@@ -600,5 +600,10 @@
 		"gameIndex": "games/worldshardestgame2/index.html",
 		"gameName": "World's Hardest Game 2",
 		"popular": false
+	},
+	{
+		"gameIndex": "games/xtractpaperclip/index.html",
+		"gameName": "x-tract_paperclip",
+		"popular": false
 	}
 ]
